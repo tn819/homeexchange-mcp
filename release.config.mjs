@@ -54,7 +54,7 @@ export default {
         changelogTitle: '# Changelog\n\nAll notable changes to homeexchange-mcp are documented here.',
       },
     ],
-    '@semantic-release/npm',
+    ['@semantic-release/npm', { npmPublish: false }],
     [
       '@semantic-release/git',
       {
