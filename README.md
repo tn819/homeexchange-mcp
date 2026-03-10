@@ -1,6 +1,8 @@
-# HomeExchange MCP
+# homeexchange-mcp
 
-A local MCP server for [HomeExchange](https://www.homeexchange.com) — search homes, manage conversations, and explore the API.
+An unofficial, local MCP server for [HomeExchange](https://www.homeexchange.com) — search homes, read conversations, manage favourites, and more, directly from any MCP-compatible AI client.
+
+> **Status:** Personal/experimental. See [disclaimer](#disclaimer) before use.
 
 ---
 
@@ -27,7 +29,7 @@ A local MCP server for [HomeExchange](https://www.homeexchange.com) — search h
         HomeExchange API
 ```
 
-Auth is captured once via browser automation. The MCP server runs locally over stdio and makes direct authenticated API calls — no browser needed at runtime. Works with any MCP-compatible client.
+Auth is captured once via browser automation. The MCP server runs locally over stdio and makes direct authenticated API calls using your own session — no browser needed at runtime. Works with any MCP-compatible client.
 
 ---
 
@@ -60,7 +62,7 @@ npm run mcp
 
 ## MCP client setup
 
-The server uses **stdio transport** — the standard used by all major MCP clients. Add it to whichever client you use:
+The server uses **stdio transport** — the standard used by all major MCP clients.
 
 ### Claude Desktop
 
@@ -72,7 +74,7 @@ The server uses **stdio transport** — the standard used by all major MCP clien
     "homeexchange": {
       "command": "npx",
       "args": ["ts-node", "src/mcp.ts"],
-      "cwd": "/path/to/homeexchange"
+      "cwd": "/path/to/homeexchange-mcp"
     }
   }
 }
@@ -82,20 +84,6 @@ The server uses **stdio transport** — the standard used by all major MCP clien
 
 ```bash
 claude mcp add homeexchange -- npx ts-node src/mcp.ts
-```
-
-Or in `.claude/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "homeexchange": {
-      "command": "npx",
-      "args": ["ts-node", "src/mcp.ts"],
-      "cwd": "/path/to/homeexchange"
-    }
-  }
-}
 ```
 
 ### Cursor
@@ -108,7 +96,7 @@ Or in `.claude/mcp.json`:
     "homeexchange": {
       "command": "npx",
       "args": ["ts-node", "src/mcp.ts"],
-      "cwd": "/path/to/homeexchange"
+      "cwd": "/path/to/homeexchange-mcp"
     }
   }
 }
@@ -124,21 +112,18 @@ Or in `.claude/mcp.json`:
     "homeexchange": {
       "command": {
         "path": "npx",
-        "args": ["ts-node", "src/mcp.ts"],
-        "env": {}
+        "args": ["ts-node", "src/mcp.ts"]
       }
     }
   }
 }
 ```
 
-### Other clients
-
-Any client that supports MCP stdio transport works. Point it at:
+### Any other stdio-compatible client
 
 ```
 command: npx ts-node src/mcp.ts
-cwd:     /path/to/homeexchange
+cwd:     /path/to/homeexchange-mcp
 ```
 
 ---
@@ -172,7 +157,7 @@ Get full details for a listing by ID.
 
 #### `get_home_calendar`
 
-Get availability calendar for a home showing blocked and open dates.
+Get the availability calendar for a home (blocked and open dates).
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -276,9 +261,9 @@ Open a new conversation with a member about their home.
 
 | Script | Description |
 |--------|-------------|
-| `npm run login` | Capture auth session via browser |
+| `npm run login` | Capture auth session via browser (run this first) |
 | `npm run mcp` | Start the local MCP server |
-| `npm run record` | Full network recording with HAR capture |
+| `npm run record` | Full network recording with HAR capture (for API exploration) |
 | `npm run analyze` | Analyze a captured `.har` file into `api-map.json` |
 | `npm run build` | Compile TypeScript |
 | `npm run check` | Typecheck + lint |
@@ -303,7 +288,29 @@ src/
 
 ## Roadmap
 
-- [ ] **Calendar integration** — query/update availability, check open dates before messaging, surface conflicts across exchange requests
-- [ ] **Remote MCP** — hosted endpoint (Railway/Fly.io); requires proper OAuth/session-refresh flow, not manual capture
-- [ ] **Token expiry detection** — auto-prompt to re-run login on 401
+- [ ] **Calendar integration** — query/update home availability, check open dates before messaging, surface conflicts across exchange requests
+- [ ] **Remote MCP** — hosted endpoint (Railway/Fly.io); requires proper OAuth/session-refresh flow rather than manual capture
+- [ ] **Token expiry detection** — auto-prompt to re-run login when a 401 is encountered
 - [ ] **Saved search alerts** — poll for new homes matching saved searches
+
+---
+
+## Disclaimer
+
+This project is **unofficial** and has no affiliation with HomeExchange SAS.
+
+- It accesses the HomeExchange platform using your own account credentials, in the same way your browser does
+- It is intended for **personal, non-commercial use only** — to make your own home exchange experience smoother
+- It is **not for profit** and must not be used to scrape, resell, or commercially exploit HomeExchange data
+- Use of this tool is subject to [HomeExchange's Terms of Service](https://www.homeexchange.com/en/page/terms)
+- The HomeExchange API is undocumented and unofficial — endpoints may change or break at any time without notice
+
+**The goal is to build something useful for the HomeExchange community, and ideally to partner with HomeExchange directly to do this properly.** If you work at HomeExchange and want to collaborate on an official integration, please open an issue or get in touch.
+
+---
+
+## License
+
+[MIT](LICENSE) — free to use, modify, and share for personal and non-commercial purposes.
+
+HomeExchange® is a registered trademark of HomeExchange SAS. This project is not endorsed by or affiliated with HomeExchange SAS.
