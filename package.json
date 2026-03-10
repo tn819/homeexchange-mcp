@@ -1,6 +1,6 @@
 {
-  "name": "homeexchange",
-  "version": "1.0.0",
+  "name": "homeexchange-mcp",
+  "version": "0.0.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -15,13 +15,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "HomeExchange automation with Playwright + Claude",
+  "description": "Unofficial local MCP server for HomeExchange",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/node": "^25.4.0",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
+    "conventional-changelog-conventionalcommits": "^9.3.0",
     "eslint": "^10.0.3",
+    "semantic-release": "^25.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
