@@ -1,0 +1,33 @@
+{
+  "name": "homeexchange",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "record": "ts-node src/record.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "check": "npm run typecheck && npm run lint",
+    "analyze": "ts-node src/analyze.ts",
+    "login": "ts-node src/login.ts",
+    "mcp": "ts-node src/mcp.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "HomeExchange automation with Playwright + Claude",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.4.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "eslint": "^10.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@playwright/test": "^1.58.2",
+    "playwright": "^1.58.2"
+  }
+}
