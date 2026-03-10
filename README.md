@@ -27,7 +27,7 @@ A local MCP server for [HomeExchange](https://www.homeexchange.com) — search h
         HomeExchange API
 ```
 
-Auth is captured once via browser automation. The MCP server runs locally and makes direct authenticated API calls — no browser needed at runtime.
+Auth is captured once via browser automation. The MCP server runs locally over stdio and makes direct authenticated API calls — no browser needed at runtime. Works with any MCP-compatible client.
 
 ---
 
@@ -56,7 +56,15 @@ A browser opens. Log in to HomeExchange, then press **Ctrl+C**. Your session (to
 npm run mcp
 ```
 
-Add to your Claude Code MCP config:
+---
+
+## MCP client setup
+
+The server uses **stdio transport** — the standard used by all major MCP clients. Add it to whichever client you use:
+
+### Claude Desktop
+
+`~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -70,33 +78,197 @@ Add to your Claude Code MCP config:
 }
 ```
 
+### Claude Code
+
+```bash
+claude mcp add homeexchange -- npx ts-node src/mcp.ts
+```
+
+Or in `.claude/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "homeexchange": {
+      "command": "npx",
+      "args": ["ts-node", "src/mcp.ts"],
+      "cwd": "/path/to/homeexchange"
+    }
+  }
+}
+```
+
+### Cursor
+
+`~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "homeexchange": {
+      "command": "npx",
+      "args": ["ts-node", "src/mcp.ts"],
+      "cwd": "/path/to/homeexchange"
+    }
+  }
+}
+```
+
+### Zed
+
+`.zed/settings.json`:
+
+```json
+{
+  "context_servers": {
+    "homeexchange": {
+      "command": {
+        "path": "npx",
+        "args": ["ts-node", "src/mcp.ts"],
+        "env": {}
+      }
+    }
+  }
+}
+```
+
+### Other clients
+
+Any client that supports MCP stdio transport works. Point it at:
+
+```
+command: npx ts-node src/mcp.ts
+cwd:     /path/to/homeexchange
+```
+
 ---
 
 ## MCP tools
 
 ### Search & discovery
 
-| Tool | Description |
-|------|-------------|
-| `search_homes` | Search by location, dates, guests, exchange type, property type |
-| `get_home` | Full details for a listing by ID |
-| `get_home_calendar` | Availability calendar (blocked/open dates) |
-| `get_recommendations` | Personalised home picks |
-| `list_my_homes` | Your own listings |
-| `list_favorites` | Your saved homes |
-| `add_favorite` | Save a home |
-| `remove_favorite` | Unsave a home |
-| `list_saved_searches` | Your saved search filters |
-| `get_user_profile` | Another member's public profile |
+#### `search_homes`
+
+Search HomeExchange listings by location, dates, guests, and exchange type.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `location` | string | No | — | City, region, or country name |
+| `checkin` | string | No | — | Check-in date (`YYYY-MM-DD`) |
+| `checkout` | string | No | — | Check-out date (`YYYY-MM-DD`) |
+| `guests` | number | No | — | Number of guests |
+| `exchange_type` | string | No | — | `GuestPoints` · `simultaneous` · `non_simultaneous` |
+| `home_type` | string | No | — | `house` · `apartment` · `other` |
+| `limit` | number | No | `20` | Results per page (max 36) |
+| `offset` | number | No | `0` | Pagination offset |
+
+#### `get_home`
+
+Get full details for a listing by ID.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `home_id` | string | **Yes** | Numeric home ID |
+
+#### `get_home_calendar`
+
+Get availability calendar for a home showing blocked and open dates.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `home_id` | string | **Yes** | Numeric home ID |
+
+#### `get_recommendations`
+
+Get personalised home picks based on your profile and history.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `limit` | number | No | `8` | Number of recommendations |
+
+#### `list_my_homes`
+
+List your own HomeExchange listings. No parameters.
+
+#### `list_favorites`
+
+List your saved favourite homes.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `limit` | number | No | `20` | Number of results |
+
+#### `add_favorite`
+
+Save a home to your favourites.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `home_id` | string | **Yes** | Home ID to save |
+
+#### `remove_favorite`
+
+Remove a home from your favourites.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `home_id` | string | **Yes** | Home ID to remove |
+
+#### `list_saved_searches`
+
+List your saved search filters.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `limit` | number | No | `100` | Number of results |
+
+#### `get_user_profile`
+
+Get a member's public profile.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `user_id` | string | **Yes** | Numeric user ID |
+
+---
 
 ### Messaging
 
-| Tool | Description |
-|------|-------------|
-| `list_conversations` | List threads (ALL / UNANSWERED / ARCHIVED) with cursor pagination |
-| `get_conversation` | All messages in a thread |
-| `send_message` | Send a message in an existing thread |
-| `start_conversation` | Open a new thread about a home |
+#### `list_conversations`
+
+List your HomeExchange conversation threads.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `filter` | string | No | `ALL` | `ALL` · `UNANSWERED` · `ARCHIVED` |
+| `limit` | number | No | `20` | Number of threads to return |
+| `after` | string | No | — | Pagination cursor from a previous response |
+
+#### `get_conversation`
+
+Get all messages in a conversation thread.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `conversation_id` | string | **Yes** | Conversation ID |
+
+#### `send_message`
+
+Send a message in an existing conversation.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `conversation_id` | string | **Yes** | Conversation ID |
+| `text` | string | **Yes** | Message text |
+
+#### `start_conversation`
+
+Open a new conversation with a member about their home.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `home_id` | string | **Yes** | The home you are enquiring about |
+| `text` | string | **Yes** | Opening message |
 
 ---
 
