@@ -8,6 +8,7 @@ Search homes · Read messages · Manage favourites · All from your AI client
 
 [![Version](https://img.shields.io/github/v/release/tn819/homeexchange-mcp?color=FF6B35&label=version)](https://github.com/tn819/homeexchange-mcp/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-FF6B35)](LICENSE)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tn819_homeexchange-mcp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=tn819_homeexchange-mcp)
 [![Unofficial](https://img.shields.io/badge/status-unofficial-grey)](https://github.com/tn819/homeexchange-mcp#disclaimer)
 
 > **Unofficial project.** Not affiliated with or endorsed by HomeExchange SAS.
@@ -295,10 +296,30 @@ src/
 
 ## Roadmap
 
-- [ ] **Calendar integration** — query and update home availability, check open dates before messaging, surface conflicts across requests
-- [ ] **Remote MCP** — hosted endpoint so you don't need the project running locally; requires proper OAuth/token-refresh (not manual capture)
-- [ ] **Token expiry detection** — auto-prompt to re-run login on 401
-- [ ] **Saved search alerts** — notify when new homes match your saved searches
+Tracked as GitHub Issues — upvote or comment to influence priority:
+
+- [#9 Calendar integration](https://github.com/tn819/homeexchange-mcp/issues/9) — query and update availability, surface conflicts across requests
+- [#10 Remote MCP](https://github.com/tn819/homeexchange-mcp/issues/10) — hosted endpoint, no local setup required
+- [#11 Token expiry detection](https://github.com/tn819/homeexchange-mcp/issues/11) — auto-prompt on 401 *(good first issue)*
+- [#12 Saved search alerts](https://github.com/tn819/homeexchange-mcp/issues/12) — notify when new homes match your saved searches
+
+---
+
+## Contributing
+
+Ideas, bug reports, and pull requests are welcome.
+
+**Got a feature idea or found a bug?** [Open an issue](https://github.com/tn819/homeexchange-mcp/issues/new) — describe what you were trying to do and what happened (or didn't).
+
+**Want to contribute code?**
+
+1. Fork the repo and create a branch from `main`
+2. Make your changes — keep commits [conventional](https://www.conventionalcommits.org/) (`fix:`, `feat:`, `chore:` etc.)
+3. Open a pull request — CI must pass before merge
+
+**Good first issues** are tagged [`good first issue`](https://github.com/tn819/homeexchange-mcp/labels/good%20first%20issue) — start there if you're new to the codebase.
+
+> Note: This project reverse-engineers a private API. New tools may break if HomeExchange changes their endpoints. Please check existing issues before reporting an API breakage.
 
 ---
 
