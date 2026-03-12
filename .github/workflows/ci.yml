@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,6 +34,7 @@ jobs:
         run: npm run check
 
       - name: SonarCloud scan
+        if: github.actor != 'dependabot[bot]'
         uses: sonarsource/sonarcloud-github-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
